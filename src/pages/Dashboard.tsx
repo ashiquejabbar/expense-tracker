@@ -8,6 +8,8 @@ import { Filter, Transaction } from '../types/types'
 import AddTransactionForm from '../components/AddTransactionForm'
 import { Menu, Transition, Dialog } from '@headlessui/react'
 import { ChartBarIcon, LogOut as Log } from 'lucide-react';
+import Markdown from "react-markdown";
+
 // import { XIcon, ChartBarIcon } from '@heroicons/react/outline'
 
 export default function Dashboard() {
@@ -75,7 +77,7 @@ export default function Dashboard() {
 
     try {
       const report = await generateAIReport(transactions)
- 
+
       setShowAIReport(true)
       startTypingEffect(report)
     } catch (err) {
@@ -97,7 +99,7 @@ export default function Dashboard() {
       if (index >= text.length) {
         clearInterval(typingInterval)
       }
-    }, 50) 
+    }, 50)
   }
 
 
@@ -192,31 +194,31 @@ export default function Dashboard() {
                 onClick={() => setShowAddForm(true)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 flex-grow sm:flex-grow-0 text-sm"
               >
-                
+
                 Add Transaction
               </button>
               <button
                 onClick={handleAIReports}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300 flex-grow sm:flex-grow-0 text-sm flex items-center justify-center"
-            
+
               >
                 {loadingAIReport ? (
                   <>
-                  <svg className="w-5 h-5 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="text-white" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="text-gray-400" fill="currentColor" d="M4 12a8 8 0 01.3-2.9l-1.7-1a10 10 0 00-.5 3.9zM20.7 4a8 8 0 01-.3 2.9l1.7 1a10 10 0 00.5-3.9zM12 4a8 8 0 01-2.9.3l-1-1.7a10 10 0 003.9-.5zM4.3 20a8 8 0 012.9-.3l1 1.7a10 10 0 00-3.9.5z"></path>
-                  </svg>
-                  <span>AI Reports</span>
+                    <svg className="w-5 h-5 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="text-white" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="text-gray-400" fill="currentColor" d="M4 12a8 8 0 01.3-2.9l-1.7-1a10 10 0 00-.5 3.9zM20.7 4a8 8 0 01-.3 2.9l1.7 1a10 10 0 00.5-3.9zM12 4a8 8 0 01-2.9.3l-1-1.7a10 10 0 003.9-.5zM4.3 20a8 8 0 012.9-.3l1 1.7a10 10 0 00-3.9.5z"></path>
+                    </svg>
+                    <span>AI Reports</span>
                   </>
                 )
-                
-                : (
-                  
-                  <>
-                    <ChartBarIcon className="h-5 w-5 mr-2" />
-                    AI Reports
-                  </>
-                )}
+
+                  : (
+
+                    <>
+                      <ChartBarIcon className="h-5 w-5 mr-2" />
+                      AI Reports
+                    </>
+                  )}
               </button>
 
             </div>
@@ -234,35 +236,39 @@ export default function Dashboard() {
             />
           </div>
         )}
-
-        <Dialog
-          open={showAIReport}
-          onClose={() => setShowAIReport(false)}
-          className="relative z-50"
+      <Dialog
+  open={showAIReport}
+  onClose={() => setShowAIReport(false)}
+  className="relative z-50"
+>
+  <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+  
+  <div className="fixed inset-0 flex items-center justify-center p-4">
+    <Dialog.Panel className="w-full max-w-4xl rounded-lg bg-white p-6 "> {/* Set max-height and enable scrollbar */}
+      <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
+        AI Report
+      </Dialog.Title>
+      <div className="mt-2  max-h-[60vh] overflow-y-auto">
+        <p className="text-sm text-gray-500">
+          <Markdown className="text-sm text-gray-700 font-semibold whitespace-pre-wrap">
+            {typedReport}
+          </Markdown>
+        </p>
+      </div>
+      
+      <div className="mt-4 flex justify-end">
+        <button
+          type="button"
+          className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={() => setShowAIReport(false)}
         >
-          <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+          Close
+        </button>
+      </div>
+    </Dialog.Panel>
+  </div>
+</Dialog>
 
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <Dialog.Panel className="w-full max-w-md rounded bg-white p-6">
-              <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">
-                AI Report
-              </Dialog.Title>
-              <div className="mt-2">
-                <p className="text-sm text-gray-500">{typedReport}</p>
-              </div>
-
-              <div className="mt-4 flex justify-end">
-                <button
-                  type="button"
-                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  onClick={() => setShowAIReport(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </Dialog.Panel>
-          </div>
-        </Dialog>
 
       </main>
     </div>
